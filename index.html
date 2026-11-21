@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CyberWatch cybersecurity vulnerability dashboard.">
+    <title>CyberWatch | Security Intelligence</title>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">
+            <span class="logo-icon">◈</span>CyberWatch
+        </a>
+        <span class="header-label">SECURITY INTELLIGENCE</span>
+    </header>
+    <main class="container">
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">CYBERSECURITY MONITOR</p>
+                <h1>Stay Informed.<br><span>Stay Protected.</span></h1>
+                <p class="subtitle">Explore some of the reported vulnerabilities and understand what are potential security threats.</p>
+            </div>
+            <div class="shield">⬡</div>
+        </section>
+        <section class="stats">
+            <article class="stat-card">
+                <p>Total Vulnerabilities</p>
+                <h2 id="totalCount">---</h2>
+            </article>
+            <article class="stat-card">
+                <p>Critical Threats</p>
+                <h2 id="criticalCount">---</h2>
+            </article>
+            <article class="stat-card">
+                <p>High Severity</p>
+                <h2 id="highCount">---</h2>
+            </article>
+        </section>
+        <section class="threat-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">THREAT DATABASE</p>
+                    <h2>Recent Vulnerabilities</h2>               
+                </div>
+            <button id="refreshBtn" class="refresh-btn">↻ Refresh
+            </button>
+            </div>
+            <div class="controls">
+                <input type="search" id="searchInput" placeholder="Search CVE or description" aria-label="Search Vulnerabilities">
+                <select id="severityFilter" aria-label="Filter by severity">
+                    <option value="all">All Severities</option>
+                    <option value="CRITICAL">Critical</option>
+                    <option value="HIGH">High</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="LOW">Low</option>
+                    <option value="UNKNOWN">Unrated</option>
+                </select>
+                <select id="sortSelect" aria-label="Sort Vulnerabilities">
+                    <option value="date">Newest</option>
+                    <option value="score">Highest Score</option>
+                    <option value="oldest">Oldest</option>
+                </select>
+            </div>
+            <p id="statusMessage" class="status" aria-live="polite">Loading Vulnerability Data...</p>
+            <div id="vulnerabilityList" class="vulnerability-list"></div>
+        </section>
+        <footer>
+            <p>CyberWatch &copy; 2026 | Powered by the NIST National Vulnerability Database.</p>
+            <a href="https://nvd.nist.gov/" target="_blank" rel="noopener noreferrer">Official NVD Database ↗</a>        
+        </footer>
+    </main>
+    <script src="java.js"></script>
+</body>
+</html>
