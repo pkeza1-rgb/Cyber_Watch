@@ -1,0 +1,232 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1120;
+    color: #e8edf5;
+    line-height: 1.6;
+}
+.header {
+    padding: 22px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #263248;
+}
+.logo {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 23px;
+    font-weight: bold;
+}
+.logo-icon {
+    color: #c6a76b;
+}
+.header-label, .eyebrow {
+    color: #c6a76b;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+.container {
+    width: 84%;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+.welcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 35px 0;
+}
+.welcome h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.2;
+    margin: 15px 0;
+}
+.welcome h1 span {
+color: #c6a76b;
+}
+.subtitle {
+    color: #9ba8bb;
+    max-width: 480px;
+}
+.shield {
+    font-size: 110px;
+    color: #c6a76b;
+    opacity: 0.8;
+}
+.stats{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 35px 0 55px;
+}
+.stat-card {
+    background: #151f30;
+    border: 1px solid #263248;
+    padding: 25px;
+    border-radius: 9px;
+}
+.stat-card p {
+    color: #9ba8bb;
+    font-size: 14px;
+}
+.stat-card h2 {
+    color: #c6a76b;
+    font-size: 32px;
+    margin-top: 8px;
+}
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    align-items: 22px;
+}
+.section-heading h2 {
+    font-family: Georgia, serif;
+    font-size: 28px;
+}
+.refresh-btn {
+    background: #c6a76b;
+    color: #101827;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+input:focus, select:focus {
+    outline: 2px solid #c6a76b;
+    outline-offset: 2px;
+}
+.status {
+    color: #9ba8bb;
+    margin: 18px 0;
+    font-size: 14px;
+}
+.vulnerability-list {
+    display: grid;
+    gap: 14px;
+}
+.vulnerability {
+    background: #151f30;
+    border: 1px solid #263248;
+    border-left: 4px solid #c6a76b;
+    padding: 20px;
+    border-radius: 7px;
+    transition: 0.2s;
+}
+.vulnerability:hover {
+    border-color: #c6a76b;
+    transform: translateY(-2px);
+}
+.vulnerability h3 {
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+.vulnerability p {
+    color: #aab5c5;
+    margin-bottom: 14px;
+}
+.vulnerability a {
+    color: #c6a76b;
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    text-decoration: none;
+}
+.meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 12px 0;
+    font-size: 12px;
+    color: #9ba8bb;
+}
+.severity {
+    padding: 4px 9px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.CRITICAL {
+    color: #ff7777;
+    background: #482329;
+}
+.HIGH {
+    color: #ffad75;
+    background: #493021;
+}
+.MEDIUM {
+    color: #f0ce72;
+    background: #453c22;
+}
+.LOW {
+    color: #72d9a6;
+    background: #1c4235;
+}
+.UNKNOWN {
+    color: #b9c2d0;
+    background: #303b4c;
+}
+footer {
+    border-top: 1px solid #263248;
+    margin-top: 65px;
+    padding: 25px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    color: #8996a9;
+    font-size: 12px;
+}
+footer a {
+    color: #c6a76b;
+    text-decoration: none;
+}
+button:hover {
+    opacity: 0.85;
+}
+button:focus, a:focus-visible {
+    outline: 2px solid #c6a76b;
+    outline-offset: 3px;
+}
+@media (max-width: 700px) {
+    .container {
+        width: 90%;
+        margin: 30px auto;
+    }
+    .header {
+        padding: 18px 5%;
+    }
+    .header-label {
+        font-size: 9px;
+    }
+    .shield {
+        display: none;
+    }
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 25px 0 40px;
+    }
+    .controls {
+        grid-template-columns: 1fr;
+    }
+    .section-heading h2 {
+        font-size: 22px;
+    }
+    .welcome h2 {
+        font-size: 40px;
+    }
+}
