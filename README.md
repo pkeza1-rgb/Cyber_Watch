@@ -378,4 +378,4 @@ The application does not currently implement user authentication or require logi
 
 - GitHub repository:
 - Live application: http://13.40.97.228
-- Demo video:
+- Demo video: https://youtu.be/K1PPkt8hEYg
