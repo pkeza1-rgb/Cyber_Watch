@@ -9,6 +9,7 @@ const filter = document.getElementById("severityFilter");
 const sort = document.getElementById("sortSelect");
 
 let vulnerabilities = [];
+let isLoading = false;
 
 let severityChart;
 let trendChart;
@@ -61,7 +62,7 @@ function updateChartTheme() {
 
     if (trendChart) {
         trendChart.data.datasets[0].borderColor = accentColor;
-        trendChart.data.datasets[0].bacgroundColor = `${accentColor}26`;
+        trendChart.data.datasets[0].backgroundColor = `${accentColor}26`;
     }
 
     charts.forEach( chart => {
@@ -98,16 +99,27 @@ function getDescription(cve) {
     return description?.value || "No description available.";
 }
 async function loadData(force = false) {
+    if (isLoading) {
+        return;
+    }
+
     const cached = localStorage.getItem(ckey);
 
     if (!force && cached) {
         try {
             const saved = JSON.parse(cached);
 
-            if (Array.isArray(saved.data) && Date.now() - saved.time < ctime) {vulnerabilities = saved.data; displayData(); return;}
+            if (
+                Array.isArray(saved.data) && 
+                typeof saved.time === "number" &&
+                Number.isFinite(saved.time) &&
+                Date.now() - saved.time >= 0 &&
+                Date.now() - saved.time < ctime) 
+                {vulnerabilities = saved.data; displayData(); return;}
         }
         catch {localStorage.removeItem(ckey);}
     }
+    isLoading = true;
     status.textContent = "Loading security information...";
     list.innerHTML = "";
 
@@ -130,7 +142,7 @@ async function loadData(force = false) {
             throw new Error("Invalid API response.");
         }
 
-        vulnerabilities = data.vulnerabilities.map(item => item.cve);
+        vulnerabilities = data.vulnerabilities.filter(item => item && item.cve && item.cve.id).map(item => item.cve);
 
         localStorage.setItem(ckey, JSON.stringify({data: vulnerabilities, time: Date.now()}));
 
@@ -160,6 +172,9 @@ async function loadData(force = false) {
                 status.textContent = "Unable to load data. Please refresh the page and try again.";
             }
         }
+    }
+    finally {
+        isLoading = false;
     }
 }
 function updateStats(data) {
