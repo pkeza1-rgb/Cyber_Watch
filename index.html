@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="CyberWatch cybersecurity vulnerability dashboard.">
-    <title>CyberWatch | Security Intelligence</title>
+    <title>Cyber Watch | Security Intelligence</title>
     <link rel="stylesheet" href="style.css">    
 </head>
 <body>
     <header class="header">
         <a href="#" class="logo">
-            <span class="logo-icon">◈</span>CyberWatch
+            <span class="logo-icon">◈</span> Cyber Watch
         </a>
         <span class="header-label">SECURITY INTELLIGENCE</span>
     </header>
@@ -36,6 +36,34 @@
                 <p>High Severity</p>
                 <h2 id="highCount">---</h2>
             </article>
+        </section>
+        <section class="analytics-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SECURITY ANALYTICS</p>
+                    <h2>Vulnerability Insights</h2>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <article class="chart-card">
+                    <h3>Severity Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </article>
+                <article class="chart-card">
+                    <h3>Publication Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </article>
+                <article class="chart-card">
+                    <h3>CVSS Score Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="cvssChart"></canvas>
+                    </div>
+                </article>
+            </div>
         </section>
         <section class="threat-section">
             <div class="section-heading">
@@ -70,6 +98,7 @@
             <a href="https://nvd.nist.gov/" target="_blank" rel="noopener noreferrer">Official NVD Database ↗</a>        
         </footer>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="java.js"></script>
 </body>
 </html>
