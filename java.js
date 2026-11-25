@@ -13,6 +13,74 @@ let vulnerabilities = [];
 let severityChart;
 let trendChart;
 let cvssChart;
+const themeButton = document.getElementById("theme-toggle");
+function setTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "light") {
+        themeButton.textContent = "☾ Dark Mode";
+    }
+    else {
+        themeButton.textContent = "☀ Light Mode";
+    }
+    localStorage.setItem("cyber_watch_theme", theme);
+    updateChartTheme();
+}
+function updateChartTheme() {
+    const styles = getComputedStyle(document.documentElement);
+
+    const textColor = styles.getPropertyValue("--text-color").trim();
+    const mutedColor = styles.getPropertyValue("--muted-color").trim();
+    const borderColor = styles.getPropertyValue("--border-color").trim();
+    const cardColor = styles.getPropertyValue("--card-color").trim();
+    const accentColor = styles.getPropertyValue("--accent-color").trim();
+
+    const charts = [severityChart, trendChart, cvssChart];
+
+    charts.forEach(chart => {
+        if (!chart) {return;}
+
+        if (chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
+        }
+
+        if (chart.options.scales) {
+            Object.values(chart.options.scales).forEach(axis => {
+                if (axis.ticks) {
+                axis.ticks.color = mutedColor;
+                }
+                if (axis.grid) {
+                    axis.grid.color = borderColor;
+                }
+            });
+        }
+    });
+
+    if (severityChart) {
+        severityChart.data.datasets[0].borderColor = cardColor;
+    }
+
+    if (trendChart) {
+        trendChart.data.datasets[0].borderColor = accentColor;
+        trendChart.data.datasets[0].bacgroundColor = `${accentColor}26`;
+    }
+
+    charts.forEach( chart => {
+        if (chart) { 
+            chart.update();
+        }
+    });
+}
+themeButton.addEventListener("click", () => {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    if (currentTheme === "light") {
+        setTheme("dark");
+    }
+    else {
+        setTheme("light");
+    }
+});
+const savedTheme = localStorage.getItem("cyber_watch_theme") || "dark";
+setTheme(savedTheme);
 function getScore(cve) {
     const metrics = cve.metrics || {};
     const versions = ["cvssMetricV40", "cvssMetricV31", "cvssMetricV30", "cvssMetricV2"];
@@ -133,7 +201,7 @@ function updateSeverityChart() {
                 plugins: {
                     legend: {
                     labels: {
-                        color: "#e8edf5"
+                        color: getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim()
                     }
                 }
             }
@@ -167,9 +235,9 @@ else {
             tension: 0.3
         }]},
         options: {responsive: true, maintainAspectRatio: false,
-            plugins: {legend: {labels: {color: "#e8edf5"}}
+            plugins: {legend: {labels: {color: getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim()}}
             },
-            scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, tricks: {color: "#9ba8bb", precision: 0},grid: {color: "#263248"}}}
+            scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, ticks: {color: "#9ba8bb", precision: 0},grid: {color: "#263248"}}}
         }
     });
 }
@@ -204,7 +272,7 @@ function updateCvssChart() {
     else {
         cvssChart = new Chart(ctx, {type: "bar", data: {labels: labels, datasets: [{label: "number of vulnerabilities",
             data: values, backgroundColor: ["#72d9a6", "#f0ce72", "#ffad75", "#ff7777"], borderRadius: 5
-        }]}, options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {labels: {color: "#e8edf5"}}}, scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, ticks: {color: "#9ba8bb", precision: 0}, color: "#263248"}}}});
+        }]}, options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {labels: {color: getComputedStyle(document.documentElement).getPropertyValue("--text-color").trim()}}}, scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, ticks: {color: "#9ba8bb", precision: 0}, grid: {color:"#263248"}}}}});
     }
 }
 function displayData() {
@@ -226,6 +294,7 @@ function displayData() {
     updateSeverityChart();
     updateTrendChart();
     updateCvssChart();
+    updateChartTheme();
     list.replaceChildren();
     status.textContent = `${results.length} vulnerabilities found`;
     if (results.length === 0) {
