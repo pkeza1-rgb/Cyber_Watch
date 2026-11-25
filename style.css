@@ -84,7 +84,7 @@ color: #c6a76b;
     display: flex;
     justify-content: space-between;
     margin-bottom: 22px;
-    align-items: 22px;
+    align-items: center;
 }
 .section-heading h2 {
     font-family: Georgia, serif;
@@ -179,6 +179,37 @@ input:focus, select:focus {
     color: #b9c2d0;
     background: #303b4c;
 }
+.analytics-section {
+    margin: 55px 0;
+}
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+.chart-card {
+    background:#151f30;
+    border: 1px solid #263248;
+    padding: 22px;
+    border-radius: 9px;
+}
+.chart-card h3 {
+    color:#ffffff;
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+.chart-container {
+    position:relative;
+    height: 280px;
+    width: 100%;
+}
+.chart-card:last-child {
+    grid-column: 1 / -1;
+}
+.chart-card:last-child .chart-container {
+    max-width: 650px;
+    margin: 0 auto;
+}
 footer {
     border-top: 1px solid #263248;
     margin-top: 65px;
@@ -228,5 +259,14 @@ button:focus, a:focus-visible {
     }
     .welcome h2 {
         font-size: 40px;
+    }
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    .chart-card:last-child {
+        grid-column: auto;
+    }
+    .chart-container {
+        height: 250px;
     }
 }
