@@ -10,7 +10,9 @@ const sort = document.getElementById("sortSelect");
 
 let vulnerabilities = [];
 
-
+let severityChart;
+let trendChart;
+let cvssChart;
 function getScore(cve) {
     const metrics = cve.metrics || {};
     const versions = ["cvssMetricV40", "cvssMetricV31", "cvssMetricV30", "cvssMetricV2"];
@@ -98,6 +100,113 @@ function updateStats(data) {
     document.getElementById("criticalCount").textContent = scores.filter(item => item.severity === "CRITICAL").length;
     document.getElementById("highCount").textContent = scores.filter(item => item.severity === "HIGH").length;
 }
+function updateSeverityChart() {
+    const counts = {CRITICAL: 0, HIGH: 0, MEDIUM: 0, LOW: 0, UNKNOWN: 0};
+    vulnerabilities.forEach(cve => {
+        const severity = getScore(cve).severity;
+        if (counts[severity] !== undefined) {
+            counts[severity]++;
+        }
+    });
+
+    const ctx = document.getElementById("severityChart");
+
+    if (severityChart) {
+        severityChart.data.datasets[0].data = Object.values(counts);
+        severityChart.update();
+    }
+    else {
+        severityChart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: Object.keys(counts),
+                datasets: [{
+                    data: Object.values(counts),
+                    backgroundColor: ["#ff7777", "#ffad75", "#f0ce72", "#72d9a6", "#9ba8bb"],
+                    borderColor: "#151f30",
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                    labels: {
+                        color: "#e8edf5"
+                    }
+                }
+            }
+        }
+        });
+    }
+}
+function updateTrendChart() {
+    const dailyCounts = {};
+    vulnerabilities.forEach(cve => {if (!cve.published) {return;}
+    const date = new Date(cve.published);
+    const day = date.toISOString().split("T")[0];
+    dailyCounts[day] = (dailyCounts[day] || 0) + 1;
+});
+const labels = Object.keys(dailyCounts).sort();
+const values = labels.map(day => dailyCounts[day]);
+const ctx = document.getElementById("trendChart");
+if (trendChart) {
+    trendChart.data.labels = labels;
+    trendChart.data.datasets[0].data = values;
+    trendChart.update();
+}
+else {
+    trendChart = new Chart(ctx, {type: "line",
+        data: {labels: labels, datasets: [{
+            label: "Published vulnerabilities",
+            data: values,
+            borderColor: "#c6a76b",
+            backgroundColor: "rgba(198, 167, 107, 0.15)",
+            fill: true,
+            tension: 0.3
+        }]},
+        options: {responsive: true, maintainAspectRatio: false,
+            plugins: {legend: {labels: {color: "#e8edf5"}}
+            },
+            scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, tricks: {color: "#9ba8bb", precision: 0},grid: {color: "#263248"}}}
+        }
+    });
+}
+}
+function updateCvssChart() {
+    const range = {"0.0 - 3.9":0, "4.0 - 6.9": 0, "7.0 - 8.9": 0, "9.0 - 10.0":0};
+    vulnerabilities.forEach(cve => {
+        const score = getScore(cve).score;
+        if (score === null || score === undefined){
+            return;
+        }
+        if (score <= 3.9) {
+            range["0.0 - 3.9"]++;
+        }
+        else if(score <= 6.9) {
+            range["4.0 - 6.9"]++;
+        }
+        else if (score <= 8.9) {
+            range["7.0 - 8.9"]++;
+        }
+        else if (score <= 10) {
+            range["9.0 - 10.0"]++;
+        }
+    });
+    const labels = Object.keys(range);
+    const values = Object.values(range);
+    const ctx = document.getElementById("cvssChart");
+    if (cvssChart) {
+        cvssChart.data.datasets[0].data = values;
+        cvssChart.update();
+    }
+    else {
+        cvssChart = new Chart(ctx, {type: "bar", data: {labels: labels, datasets: [{label: "number of vulnerabilities",
+            data: values, backgroundColor: ["#72d9a6", "#f0ce72", "#ffad75", "#ff7777"], borderRadius: 5
+        }]}, options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {labels: {color: "#e8edf5"}}}, scales: {x: {ticks: {color: "#9ba8bb"}, grid: {color: "#263248"}}, y: {beginAtZero: true, ticks: {color: "#9ba8bb", precision: 0}, color: "#263248"}}}});
+    }
+}
 function displayData() {
     const keyword = search.value.toLowerCase();
     const selected = filter.value;
@@ -114,6 +223,9 @@ function displayData() {
         return new Date(b.published) - new Date(a.published);
     });
     updateStats(vulnerabilities);
+    updateSeverityChart();
+    updateTrendChart();
+    updateCvssChart();
     list.replaceChildren();
     status.textContent = `${results.length} vulnerabilities found`;
     if (results.length === 0) {
