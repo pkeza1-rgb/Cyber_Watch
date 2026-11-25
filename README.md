@@ -376,6 +376,6 @@ The application does not currently implement user authentication or require logi
 
 ## 13. Submission Links
 
-- GitHub repository:
+- GitHub repository: https://github.com/pkeza1-rgb/Cyber_Watch
 - Live application: http://13.40.97.228
 - Demo video: https://youtu.be/K1PPkt8hEYg
